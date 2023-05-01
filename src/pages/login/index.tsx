@@ -1,7 +1,8 @@
-import { login } from "@/api";
-import { useAuthStore } from "@/stores";
-import { LoginData } from "@/types";
-import { logError } from "@/utils";
+import { login } from "@/api"
+import { BaseLayout } from "@/layouts"
+import { useAuthStore } from "@/stores"
+import { LoginData } from "@/types"
+import { logError } from "@/utils"
 import {
   Box,
   Button,
@@ -11,18 +12,19 @@ import {
   Stack,
   Text,
   TextInput,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import Cookies from "js-cookie";
-import Head from "next/head";
-import { useRouter } from "next/router";
+} from "@mantine/core"
+import { useForm } from "@mantine/form"
+import Cookies from "js-cookie"
+import Head from "next/head"
+import Link from "next/link"
+import { useRouter } from "next/router"
 
 const LoginPage = () => {
-  const router = useRouter();
+  const router = useRouter()
   const [isLogged, setIsLogged] = useAuthStore((state) => [
     state.isLogged,
     state.setIsLogged,
-  ]);
+  ])
 
   const form = useForm<LoginData>({
     initialValues: {
@@ -35,23 +37,23 @@ const LoginPage = () => {
       username: (val) => !val && "This is required",
       password: (val) => !val && "This is required",
     },
-  });
+  })
 
   const onSubmit = form.onSubmit(async (data: LoginData) => {
     try {
-      const res = await login(data);
+      const res = await login(data)
       Cookies.set("accessToken", res.data.accessToken, {
         // domain: process.env.NEXT_PUBLIC_API_ROOT,
-      });
-      setIsLogged(true);
+      })
+      setIsLogged(true)
     } catch (e) {
-      logError(e);
+      logError(e)
     }
-  });
+  })
 
   if (isLogged) {
-    router.push("/draw-lots");
-    return;
+    router.push("/draw-lots")
+    return
   }
 
   return (
@@ -62,10 +64,11 @@ const LoginPage = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Center h="100vh">
+      <Center>
         <Container w="100%">
+          <Space h={50} />
           <Box w="400px" m="auto">
-            <Center h="">
+            <Center>
               <Text fz="30px" fw={700}>
                 Welcome back!
               </Text>
@@ -91,11 +94,22 @@ const LoginPage = () => {
                 </Center>
               </Stack>
             </form>
+            <Space h={10} />
+            <Center>
+              <Text size="xs">
+                Don't have an account yet?{" "}
+                <Link href="/signup">Signup here</Link>
+              </Text>
+            </Center>
           </Box>
         </Container>
       </Center>
     </>
-  );
-};
+  )
+}
 
-export default LoginPage;
+LoginPage.getLayout = function getLayout(page: React.ReactNode) {
+  return <BaseLayout>{page}</BaseLayout>
+}
+
+export default LoginPage

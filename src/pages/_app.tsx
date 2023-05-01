@@ -5,31 +5,46 @@
 //   return <Component {...pageProps} />
 // }
 
-import { AppProps } from "next/app";
-import Head from "next/head";
-import { MantineProvider } from "@mantine/core";
-import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
-import { verifyToken } from "@/api";
-import { useAuthStore } from "@/stores";
+import Head from "next/head"
+import {
+  ColorScheme,
+  ColorSchemeProvider,
+  MantineProvider,
+} from "@mantine/core"
+import Cookies from "js-cookie"
+import { useEffect, useState } from "react"
+import { verifyToken } from "@/api"
+import { useAuthStore } from "@/stores"
+import { AppPropsWithLayout } from "@/types/utils"
+import { useLocalStorage } from "@mantine/hooks"
 
-export default function App(props: AppProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const setIsLogged = useAuthStore((state) => state.setIsLogged);
-  const { Component, pageProps } = props;
+export default function App(props: AppPropsWithLayout) {
+  const [isLoading, setIsLoading] = useState(true)
+  const setIsLogged = useAuthStore((state) => state.setIsLogged)
+  const { Component, pageProps } = props
+
+  const getLayout = Component.getLayout || ((page) => page)
+
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: "mantine-color-scheme",
+    defaultValue: "light",
+    getInitialValueInEffect: true,
+  })
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"))
 
   useEffect(() => {
-    const accessToken = Cookies.get("accessToken");
+    const accessToken = Cookies.get("accessToken")
     if (accessToken) {
       verifyToken(accessToken)
         .then((res) => {
-          setIsLogged(true);
+          setIsLogged(true)
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => setIsLoading(false))
     } else {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, []);
+  }, [])
 
   return (
     <>
@@ -40,17 +55,21 @@ export default function App(props: AppProps) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          /** Put your mantine theme override here */
-          colorScheme: "light",
-        }}
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
       >
-        {isLoading ? "Loading..." : <Component {...pageProps} />}
-      </MantineProvider>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            /** Put your mantine theme override here */
+            colorScheme,
+          }}
+        >
+          {isLoading ? "Loading..." : getLayout(<Component {...pageProps} />)}
+        </MantineProvider>
+      </ColorSchemeProvider>
     </>
-  );
+  )
 }

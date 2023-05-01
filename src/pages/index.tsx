@@ -1,12 +1,34 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import Link from "next/link";
-
-const inter = Inter({ subsets: ["latin"] });
-// <a href="https://www.freepik.com/free-vector/elephant-logo-element-line-art-animal-illustration-vector_19598614.htm#query=elephant%20logo&position=3&from_view=keyword&track=robertav1_2_sidr">Image by rawpixel.com</a> on Freepik
+import Head from "next/head"
+import {
+  AspectRatio,
+  Center,
+  Title,
+  Image,
+  Box,
+  Flex,
+  Text,
+  Divider,
+  Header,
+  ActionIcon,
+  useMantineColorScheme,
+  Space,
+  Button,
+} from "@mantine/core"
+import LoginForm from "@/components/LoginForm"
+import {
+  IconArrowBadgeRight,
+  IconGift,
+  IconMoon,
+  IconSignRight,
+  IconSun,
+} from "@tabler/icons-react"
+import Link from "next/link"
+// import Image from "next/image"
+// Photo by <a href="https://unsplash.com/@kate_gliz?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Kateryna Hliznitsova</a> on <a href="https://unsplash.com/s/photos/exchange-gift?plus=none&utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 export default function Home() {
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme()
+  const dark = colorScheme === "dark"
+
   return (
     <>
       <Head>
@@ -16,20 +38,60 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>Bunotan</h1>
-        <Link href="/signup">Signup</Link>
-        <Link href="/login">Login</Link>
-        {/* <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-        </div> */}
+        <Flex mah="100vh">
+          <Box sx={{ flex: 6, overflow: "hidden" }}>
+            {/* <AspectRatio ratio={720 / 1080} maw={1200} mx="auto"> */}
+            <Image
+              src="/kateryna-hliznitsova-eJvFGDBZUSE-unsplash.jpg"
+              alt=""
+            />
+            {/* </AspectRatio> */}
+          </Box>
+          <Box sx={{ flex: 4 }}>
+            <Flex direction="column" h="100%">
+              <Flex justify="flex-end" p="sm">
+                <ActionIcon
+                  onClick={() => toggleColorScheme()}
+                  variant="subtle"
+                >
+                  {dark ? (
+                    <IconSun size="2.5rem" />
+                  ) : (
+                    <IconMoon size="2.5rem" />
+                  )}
+                </ActionIcon>
+              </Flex>
+              <Center sx={{ flex: 1 }}>
+                <Box maw={500} ta="end" px={50}>
+                  <Center>
+                    <IconGift size={150} />
+                  </Center>
+                  <Space h={50} />
+                  <Title>Bunotan</Title>
+                  <Text fz="sm" pl={50}>
+                    Share the love and excitement of receiving something new
+                    with those closest to you
+                  </Text>
+                  <Divider my="sm" />
+                  <LoginForm />
+                  <Space h={10} />
+                  <Text fz="xs">
+                    <Button
+                      rightIcon={<IconArrowBadgeRight />}
+                      component={Link}
+                      href="/signup"
+                      variant="subtle"
+                      size="xs"
+                    >
+                      Create account here
+                    </Button>
+                  </Text>
+                </Box>
+              </Center>
+            </Flex>
+          </Box>
+        </Flex>
       </main>
     </>
-  );
+  )
 }
