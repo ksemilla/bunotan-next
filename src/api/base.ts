@@ -14,6 +14,10 @@ interface PostRequest<T> extends Request {
   data: T
 }
 
+interface PutRequest<T> extends Request {
+  data: Partial<T>
+}
+
 export class PublicApi {
   static get<T>(data: Request) {
     return axios.get<T>(_buildPath(data.path))
@@ -36,6 +40,14 @@ export class PrivateAPI {
 
   static post<DT, RT>(data: PostRequest<DT>) {
     return axios.post<DT, AxiosResponse<RT>>(
+      _buildPath(data.path),
+      data.data,
+      baseConfig
+    )
+  }
+
+  static put<DT, RT>(data: PutRequest<DT>) {
+    return axios.put<DT, AxiosResponse<RT>>(
       _buildPath(data.path),
       data.data,
       baseConfig

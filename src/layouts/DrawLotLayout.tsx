@@ -1,6 +1,7 @@
 import { useAuthStore } from "@/stores"
 import {
   ActionIcon,
+  Box,
   Flex,
   Menu,
   Switch,
@@ -31,7 +32,7 @@ const DrawLotLayout = (props: { children: React.ReactNode }) => {
   }
 
   return (
-    <div>
+    <Box>
       <Flex mih="100%" justify="space-between" align="center" p="sm">
         <Link href="/">
           <IconGift />
@@ -75,8 +76,10 @@ const DrawLotLayout = (props: { children: React.ReactNode }) => {
           </Menu.Dropdown>
         </Menu>
       </Flex>
-      {props.children}
-    </div>
+      <Box maw={{ base: 1200 }} m="auto" px={{ base: 20 }}>
+        {props.children}
+      </Box>
+    </Box>
   )
 }
 

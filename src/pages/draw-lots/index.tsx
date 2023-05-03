@@ -1,7 +1,7 @@
 import { DrawLotsService, createDrawLot } from "@/api"
 import { DrawLotLayout } from "@/layouts"
 import { logError } from "@/utils"
-import { Box, Button, Grid } from "@mantine/core"
+import { Box, Button, Divider, Grid } from "@mantine/core"
 import { useRouter } from "next/router"
 import { MouseEventHandler } from "react"
 import useSWR from "swr"
@@ -23,16 +23,21 @@ const DrawLots = () => {
     DrawLotsService.getAll
   )
 
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
   if (error) {
     return <div>Something went wrong</div>
   }
 
   return (
-    <Box p="lg">
+    <Box>
       <Button onClick={handleClick}>Create new session</Button>
+      <Divider mt="lg" />
       <Grid py="lg">
         {data?.list.map((drawLot) => (
-          <Grid.Col key={drawLot.id} span={4}>
+          <Grid.Col key={drawLot.id} md={4}>
             <DrawLotCard drawLot={drawLot} />
           </Grid.Col>
         ))}
