@@ -1,4 +1,4 @@
-import { DrawLotsService, createDrawLot } from "@/api"
+import { DrawLotsService } from "@/api"
 import { DrawLotLayout } from "@/layouts"
 import { logError } from "@/utils"
 import { Box, Button, Divider, Grid } from "@mantine/core"
@@ -11,7 +11,7 @@ const DrawLots = () => {
   const router = useRouter()
   const handleClick: MouseEventHandler<HTMLButtonElement> = async () => {
     try {
-      const res = await createDrawLot()
+      const res = await DrawLotsService.create()
       router.push(res.data.url)
     } catch (e) {
       logError(e)

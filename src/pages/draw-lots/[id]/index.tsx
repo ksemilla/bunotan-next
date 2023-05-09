@@ -1,25 +1,23 @@
 import { DrawLotsService } from "@/api"
 import { DrawLotLayout } from "@/layouts"
 import { NextPageWithLayout } from "@/types/utils"
-import { Box, Button, Loader, TextInput } from "@mantine/core"
+import { Box, Button, Divider, Loader, TextInput } from "@mantine/core"
 import { useDebouncedState } from "@mantine/hooks"
-import {
-  IconArrowLeft,
-  IconCircleCheck,
-  IconSignLeft,
-} from "@tabler/icons-react"
+import { IconArrowLeft, IconCircleCheck } from "@tabler/icons-react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import useSWR from "swr"
 import useSWRMutation from "swr/mutation"
+import Members from "./Members"
 
 const DrawLotDetailPage: NextPageWithLayout = () => {
   const { id } = useRouter().query
 
   const { data, isLoading, error } = useSWR(
     `draw-lots/${id}`,
-    DrawLotsService.getOne
+    (url) => (id ? DrawLotsService.getOne(url) : null),
+    { revalidateOnMount: true }
   )
 
   const { trigger, isMutating } = useSWRMutation(
@@ -38,7 +36,7 @@ const DrawLotDetailPage: NextPageWithLayout = () => {
     }
   }, [name])
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading || !data) return <div>Loading...</div>
   if (error) return <div>Error</div>
 
   return (
@@ -65,6 +63,8 @@ const DrawLotDetailPage: NextPageWithLayout = () => {
           }
         />
       </form>
+      <Divider my={10} />
+      <Members />
     </Box>
   )
 }

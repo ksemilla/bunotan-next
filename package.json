@@ -29,6 +29,10 @@
     "react-dom": "18.2.0",
     "swr": "^2.1.5",
     "typescript": "5.0.4",
+    "uuid": "^9.0.0",
     "zustand": "^4.3.7"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.1"
   }
 }

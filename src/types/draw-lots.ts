@@ -5,3 +5,21 @@ export type DrawLot = {
   owner: User
   name?: string
 }
+
+export type Member = {
+  uuid?: string
+  id: number
+  drawLot: Partial<DrawLot>
+  name: string
+  email?: string
+}
+
+export type CreateMember = {
+  drawLot: number
+  name: string
+  email?: string
+}
+
+export type QueryMember = {
+  drawLot: number
+}

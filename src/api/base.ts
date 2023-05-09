@@ -7,7 +7,7 @@ const _getAccessToken = Cookies.get("accessToken")
 
 type Request = {
   path: string
-  query?: string
+  query?: Record<string, any>
 }
 
 interface PostRequest<T> extends Request {
@@ -35,7 +35,10 @@ const baseConfig: AxiosRequestConfig = {
 
 export class PrivateAPI {
   static get<T>(data: Request) {
-    return axios.get<T>(_buildPath(data.path), baseConfig)
+    return axios.get<T>(_buildPath(data.path), {
+      params: data.query,
+      ...baseConfig,
+    })
   }
 
   static post<DT, RT>(data: PostRequest<DT>) {
@@ -52,5 +55,9 @@ export class PrivateAPI {
       data.data,
       baseConfig
     )
+  }
+
+  static delete(data: Request) {
+    return axios.delete(_buildPath(data.path), baseConfig)
   }
 }
