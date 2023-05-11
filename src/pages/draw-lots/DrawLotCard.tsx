@@ -21,7 +21,7 @@ const DrawLotCard = ({ drawLot }: { drawLot: DrawLot }) => {
       href={`/draw-lots/${drawLot.id}`}
     >
       <Title>{drawLot.name}</Title>
-      <Text>Members: 13</Text>
+      <Text>Members: {drawLot.members.length}</Text>
     </Card>
   )
 }

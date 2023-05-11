@@ -13,7 +13,7 @@ import { useRouter } from "next/router"
 import { Member } from "@/types"
 import useSWR from "swr"
 import { ChangeEventHandler, useEffect, useRef, useState } from "react"
-import { useDebouncedState } from "@mantine/hooks"
+import { useClickOutside, useDebouncedState } from "@mantine/hooks"
 import useSWRMutation from "swr/mutation"
 import { logError } from "@/utils"
 import { v4 as uuidv4 } from "uuid"
@@ -28,6 +28,11 @@ const MemberCard = (props: {
   const [doAction, setDoAction] = useState(false)
   const { id } = useRouter().query as { id: string }
   const [member, setMember] = useDebouncedState<Member>(props.member, 500)
+  const ref = useClickOutside(() => {
+    if (member.id > 0 && member.name === "") {
+      handleDelete()
+    }
+  })
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target as {
@@ -90,8 +95,8 @@ const MemberCard = (props: {
   }
 
   useEffect(() => {
-    if (doAction) {
-      if (member?.id <= 0 && member.name !== "") {
+    if (doAction && member.name !== "") {
+      if (member?.id <= 0) {
         createMember()
       } else if (member.id > 0) {
         updateMember()
@@ -110,6 +115,7 @@ const MemberCard = (props: {
 
   return (
     <Card
+      ref={ref}
       shadow="xs"
       padding={0}
       radius="md"

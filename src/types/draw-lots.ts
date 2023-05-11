@@ -4,6 +4,7 @@ export type DrawLot = {
   id: number
   owner: User
   name?: string
+  members: Member[]
 }
 
 export type Member = {

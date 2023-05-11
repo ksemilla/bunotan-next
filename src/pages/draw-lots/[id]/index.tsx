@@ -51,7 +51,6 @@ const DrawLotDetailPage: NextPageWithLayout = () => {
       </Button>
       <form>
         <TextInput
-          label="Name"
           onChange={(e) => setName(e.target.value)}
           defaultValue={data?.name}
           rightSection={
@@ -61,6 +60,14 @@ const DrawLotDetailPage: NextPageWithLayout = () => {
               <IconCircleCheck size={20} color="green" />
             )
           }
+          sx={{
+            input: {
+              "::placeholder": {
+                fontStyle: "italic",
+              },
+            },
+          }}
+          placeholder="Enter name of event"
         />
       </form>
       <Divider my={10} />
